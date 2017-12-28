@@ -18,7 +18,7 @@
         android:inputType="number"
         style="@style/EditorFieldStyle" />
     <EditText
-        android:id="@+id/edit_Product_weight"
+        android:id="@+id/edit_product_price"
         android:hint="@string/hint_product_price"
         android:inputType="number"
         style="@style/EditorFieldStyle" />

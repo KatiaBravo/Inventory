@@ -6,24 +6,19 @@
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep Editing</string>
-    <string name="category_overview">Overview</string>
-    <string name="category_gender">Gender</string>
-    <string name="category_measurement">Measurement</string>
-    <string name="editor_activity_title_new_Product">Add a Product</string>
-    <string name="editor_activity_title_edit_Product">Edit Product</string>
-    <string name="editor_insert_Product_successful">Product saved</string>
-    <string name="editor_insert_Product_failed">Error with saving Product</string>
-    <string name="editor_update_Product_successful">Product updated</string>
-    <string name="editor_update_Product_failed">Error with updating Product</string>
-    <string name="editor_delete_Product_successful">Product deleted</string>
-    <string name="editor_delete_Product_failed">Error with deleting Product</string>
+    <string name="editor_activity_title_new_product">Add a Product</string>
+    <string name="editor_activity_title_edit_product">Edit Product</string>
+    <string name="editor_insert_product_successful">Product saved</string>
+    <string name="editor_insert_product_failed">Error with saving Product</string>
+    <string name="editor_update_product_successful">Product updated</string>
+    <string name="editor_update_product_failed">Error with updating Product</string>
+    <string name="editor_delete_product_successful">Product deleted</string>
+    <string name="editor_delete_product_failed">Error with deleting Product</string>
     <string name="delete_dialog_msg">Delete this Product?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="empty_view">No products are currently in the </string>
-    <string name="empty_view_subtitle_text">Get started by adding a Product</string>
     <string name="hint_product_name">Product Name</string>
     <string name="hint_product_quantity">Quantity</string>
     <string name="hint_product_price">Price</string>
-
 </resources>
