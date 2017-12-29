@@ -7,20 +7,49 @@
     android:orientation="vertical"
     tools:context=".EditorActivity">
 
-    <EditText
-        android:id="@+id/edit_product_name"
-        android:hint="@string/hint_product_name"
-        android:inputType="textCapWords"
-        style="@style/EditorFieldStyle" />
-    <EditText
-        android:id="@+id/edit_product_quantity"
-        android:hint="@string/hint_product_quantity"
-        android:inputType="number"
-        style="@style/EditorFieldStyle" />
-    <EditText
-        android:id="@+id/edit_product_price"
-        android:hint="@string/hint_product_price"
-        android:inputType="number"
-        style="@style/EditorFieldStyle" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/unit_product_name"
+            android:text="@string/unit_product_name"
+            style="@style/EditorTitleStyle"/>
+        <EditText
+            android:id="@+id/edit_product_name"
+            android:inputType="number"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/unit_quantity"
+            android:text="@string/unit_quantity"
+            style="@style/EditorTitleStyle"/>
+        <EditText
+            android:id="@+id/edit_product_quantity"
+            android:inputType="number"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/unit_price"
+            android:text="@string/unit_dollars"
+            style="@style/EditorTitleStyle"/>
+        <EditText
+            android:id="@+id/edit_product_price"
+            android:inputType="number"
+            style="@style/EditorFieldStyle" />
+    </LinearLayout>
 
 </LinearLayout>
