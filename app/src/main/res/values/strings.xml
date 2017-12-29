@@ -18,7 +18,7 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="empty_view">No products are currently in the </string>
-    <string name="unit_product_name">Product Name</string>
+    <string name="unit_product_name">Product Name: </string>
     <string name="unit_dollars">$</string>
     <string name="unit_quantity">Quantity: </string>
 </resources>

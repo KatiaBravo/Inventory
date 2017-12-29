@@ -38,7 +38,5 @@ public class ProductCursorAdapter extends CursorAdapter {
         productNameTextView.setText(productName);
         quantityTextView.setText(String.valueOf(productQuantity));
         priceTextView.setText(String.valueOf(productPrice));
-
-
     }
 }

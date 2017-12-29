@@ -18,7 +18,7 @@
             style="@style/EditorTitleStyle"/>
         <EditText
             android:id="@+id/edit_product_name"
-            android:inputType="number"
+            android:inputType="textCapWords"
             style="@style/EditorFieldStyle" />
     </LinearLayout>
 

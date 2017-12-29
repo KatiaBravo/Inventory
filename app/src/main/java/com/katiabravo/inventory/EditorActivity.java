@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.katiabravo.inventory.data.ProductContract.ProductEntry;
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
-    private static final int EXISTING_PRODUCT_LOADER = 0;
     private Uri mCurrentProductUri;
 
     private EditText mProductNameEditText;
@@ -40,7 +39,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +47,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         Intent intent = getIntent();
         mCurrentProductUri = intent.getData();
 
-        if (mCurrentProductUri == null) {
-            setTitle(getString(R.string.editor_activity_title_new_product));
-            invalidateOptionsMenu();
-        } else {
-            setTitle(getString(R.string.editor_activity_title_details_of_product));
-            getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
-        }
-
         mProductNameEditText = (EditText) findViewById(R.id.edit_product_name);
         mQuantityEditText = (EditText) findViewById(R.id.edit_product_quantity);
         mPriceEditText = (EditText) findViewById(R.id.edit_product_price);
@@ -64,6 +54,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mProductNameEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
+
 
     }
 
@@ -78,7 +69,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
         int quantity = 0;
-        if (!TextUtils.isEmpty(priceString)) {
+        if (!TextUtils.isEmpty(quantityString)) {
             quantity = Integer.parseInt(quantityString);
         }
         values.put(ProductEntry.COLUMN_QUANTITY, quantity);
@@ -113,17 +104,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_editor, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        // If this is a new product, hide the "Delete" menu item.
-        if (mCurrentProductUri == null) {
-            MenuItem menuItem = menu.findItem(R.id.action_delete);
-            menuItem.setVisible(false);
-        }
         return true;
     }
 
@@ -199,24 +179,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public void onBackPressed() {
-        // If the product hasn't changed, continue with handling back button press
         if (!mProductHasChanged) {
             super.onBackPressed();
             return;
         }
 
-        // Otherwise if there are unsaved changes, setup a dialog to warn the user.
-        // Create a click listener to handle the user confirming that changes should be discarded.
         DialogInterface.OnClickListener discardButtonClickListener =
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // User clicked "Discard" button, close the current activity.
                         finish();
                     }
                 };
-
-        // Show dialog that there are unsaved changes
         showUnsavedChangesDialog(discardButtonClickListener);
     }
 
