@@ -83,7 +83,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         String[] project = {
                 ProductEntry._ID,
                 ProductEntry.COLUMN_PRODUCT_NAME,
-                ProductEntry.COLUMN_QUANTITY};
+                ProductEntry.COLUMN_QUANTITY,
+                ProductEntry.COLUMN_PRICE};
         return new CursorLoader(this,
                 ProductEntry.CONTENT_URI,
                 project,

@@ -32,8 +32,8 @@ public class ProductCursorAdapter extends CursorAdapter {
         int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRICE);
 
         String productName = cursor.getString(productNameColumnIndex);
-        String productQuantity = cursor.getString(quantityColumnIndex);
-        String productPrice = cursor.getString(priceColumnIndex);
+        int productQuantity = cursor.getInt(quantityColumnIndex);
+        int productPrice = cursor.getInt(priceColumnIndex);
 
         productNameTextView.setText(productName);
         quantityTextView.setText(String.valueOf(productQuantity));
