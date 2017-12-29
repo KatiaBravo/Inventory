@@ -29,7 +29,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText mProductNameEditText;
     private EditText mQuantityEditText;
     private EditText mPriceEditText;
-    
+
     private boolean mProductHasChanged = false;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
@@ -53,7 +53,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             setTitle(getString(R.string.editor_activity_title_new_product));
             invalidateOptionsMenu();
         } else {
-            setTitle(getString(R.string.editor_activity_title_edit_product));
+            setTitle(getString(R.string.editor_activity_title_details_of_product));
             getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
 
