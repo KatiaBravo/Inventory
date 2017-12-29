@@ -24,6 +24,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CatalogActivity" />
         </activity>
+        <activity
+            android:name=".DetailActivity"
+            android:label="@string/detail_activity_title"
+            android:parentActivityName=".CatalogActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CatalogActivity" />
+        </activity>
         <provider
             android:name=".data.ProductProvider"
             android:authorities="com.katiabravo.inventory"
