@@ -33,19 +33,19 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CatalogActivity.this, DetailActivity.class);
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
                 startActivity(intent);
             }
         });
-        ListView ProductListView = (ListView) findViewById(R.id.list);
+        ListView productListView = (ListView) findViewById(R.id.list);
 
         View emptyView = findViewById(R.id.empty_view);
-        ProductListView.setEmptyView(emptyView);
+        productListView.setEmptyView(emptyView);
 
         mCursorAdapter = new ProductCursorAdapter(this, null);
-        ProductListView.setAdapter(mCursorAdapter);
+        productListView.setAdapter(mCursorAdapter);
 
-        ProductListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent editIntent = new Intent(CatalogActivity.this, EditorActivity.class);

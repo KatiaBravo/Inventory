@@ -18,14 +18,14 @@ public class ProductProvider extends ContentProvider {
     private static final int PRODUCTS = 100;
     private static final int PRODUCT_ID = 101;
 
+    private ProductDbHelper mDbHelper;
+
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         sUriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_PRODUCTS, PRODUCTS);
         sUriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_PRODUCTS + "/#", PRODUCT_ID);
     }
-
-    private ProductDbHelper mDbHelper;
 
     @Override
     public boolean onCreate() {

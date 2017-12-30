@@ -31,9 +31,13 @@
             android:id="@+id/unit_quantity"
             android:text="@string/unit_quantity"
             style="@style/EditorTitleStyle"/>
-        <EditText
+        
+        <Button
+            android:layout_width=""
+            android:layout_height="" />
+        <TextView
             android:id="@+id/edit_product_quantity"
-            android:inputType="number"
+            android:text="0"
             style="@style/EditorFieldStyle" />
     </LinearLayout>
 

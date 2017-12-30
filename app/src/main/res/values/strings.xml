@@ -7,6 +7,7 @@
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep Editing</string>
     <string name="editor_activity_title_new_product">Add a Product</string>
+    <string name="editor_activity_title_product_detail">Product Details</string>
     <string name="editor_insert_product_successful">Product saved</string>
     <string name="editor_insert_product_failed">Error with saving Product</string>
     <string name="editor_update_product_successful">Product updated</string>
@@ -15,10 +16,9 @@
     <string name="editor_delete_product_failed">Error with deleting Product</string>
     <string name="delete_dialog_msg">Delete this Product?</string>
     <string name="delete">Delete</string>
-    <string name="detail_activity_title">Details</string>
     <string name="cancel">Cancel</string>
-    <string name="empty_view">No products are currently in the </string>
+    <string name="empty_view">No products are currently in the inventory.</string>
     <string name="unit_product_name">Product Name: </string>
-    <string name="unit_dollars">$</string>
+    <string name="unit_dollars">Price: $</string>
     <string name="unit_quantity">Quantity: </string>
 </resources>

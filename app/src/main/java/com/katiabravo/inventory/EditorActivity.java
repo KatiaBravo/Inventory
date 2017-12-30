@@ -18,15 +18,17 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.katiabravo.inventory.data.ProductContract.ProductEntry;
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+    private static final int EXISTING_PRODUCT_LOADER = 0;
     private Uri mCurrentProductUri;
 
-    private EditText mProductNameEditText;
-    private EditText mQuantityEditText;
+    private EditText mProductEditText;
+    private TextView mQuantityTextView;
     private EditText mPriceEditText;
 
     private boolean mProductHasChanged = false;
@@ -39,6 +41,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,32 +50,40 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         Intent intent = getIntent();
         mCurrentProductUri = intent.getData();
 
-        mProductNameEditText = (EditText) findViewById(R.id.edit_product_name);
-        mQuantityEditText = (EditText) findViewById(R.id.edit_product_quantity);
+        if (mCurrentProductUri == null) {
+            setTitle(getString(R.string.editor_activity_title_new_product));
+            invalidateOptionsMenu();
+        } else {
+            setTitle(getString(R.string.editor_activity_title_product_detail));
+            getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
+        }
+
+        mProductEditText = (EditText) findViewById(R.id.edit_product_name);
+        mQuantityTextView = (TextView) findViewById(R.id.edit_product_quantity);
         mPriceEditText = (EditText) findViewById(R.id.edit_product_price);
 
-        mProductNameEditText.setOnTouchListener(mTouchListener);
-        mQuantityEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
-
+        mQuantityTextView.setOnTouchListener(mTouchListener);
+        mPriceEditText.setOnTouchListener(mTouchListener);
 
     }
 
-    private void savePet() {
-        String nameString = mProductNameEditText.getText().toString().trim();
-        String quantityString = mQuantityEditText.getText().toString().trim();
+
+    private void saveProduct() {
+        String productNameString = mProductEditText.getText().toString().trim();
+        String quantityString = mQuantityTextView.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
 
-        if (mCurrentProductUri == null && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(quantityString)
+        if (mCurrentProductUri == null && TextUtils.isEmpty(productNameString) && TextUtils.isEmpty(quantityString)
                 && TextUtils.isEmpty(priceString)) {return;}
 
         ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME, productNameString);
         int quantity = 0;
-        if (!TextUtils.isEmpty(quantityString)) {
+        if (!TextUtils.isEmpty(priceString)) {
             quantity = Integer.parseInt(quantityString);
         }
-        values.put(ProductEntry.COLUMN_QUANTITY, quantity);
+        values.put(ProductEntry.COLUMN_PRICE, quantity);
         int price = 0;
         if (!TextUtils.isEmpty(priceString)) {
             price = Integer.parseInt(priceString);
@@ -108,10 +119,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mCurrentProductUri == null) {
+            MenuItem menuItem = menu.findItem(R.id.action_delete);
+            menuItem.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                savePet();
+                saveProduct();
                 finish();
                 return true;
             case R.id.action_delete:
@@ -136,36 +157,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         return super.onOptionsItemSelected(item);
     }
 
-    private void showDeleteConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.delete_dialog_msg);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the product.
-                deletePet();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the product.
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        // Create and show the AlertDialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    /**
-     * Perform the deletion of the product in the database.
-     */
-    private void deletePet() {
+    private void deleteProduct() {
         if (mCurrentProductUri != null){
             int rowsDeleted = getContentResolver().delete(mCurrentProductUri, null, null);
             if (rowsDeleted == 0) {
@@ -175,6 +167,26 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         }
         finish();
+    }
+    private void showDeleteConfirmationDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteProduct();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override
@@ -191,6 +203,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                         finish();
                     }
                 };
+
         showUnsavedChangesDialog(discardButtonClickListener);
     }
 
@@ -217,46 +230,39 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         if(cursor.moveToFirst()){
-            int productNameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
+            int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
             int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRICE);
 
-            String name = cursor.getString(productNameColumnIndex);
+            String name = cursor.getString(nameColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
 
-            mProductNameEditText.setText(name);
-            mQuantityEditText.setText(Integer.toString(quantity));
+            mProductEditText.setText(name);
+            mQuantityTextView.setText(Integer.toString(quantity));
             mPriceEditText.setText(Integer.toString(price));
-
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mProductNameEditText = (EditText) findViewById(R.id.edit_product_name);
-        mQuantityEditText = (EditText) findViewById(R.id.edit_product_quantity);
+        mProductEditText = (EditText) findViewById(R.id.edit_product_name);
+        mQuantityTextView = (TextView) findViewById(R.id.edit_product_quantity);
         mPriceEditText = (EditText) findViewById(R.id.edit_product_price);
     }
 
-    private void showUnsavedChangesDialog(
-            DialogInterface.OnClickListener discardButtonClickListener) {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the positive and negative buttons on the dialog.
+    private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes_dialog_msg);
         builder.setPositiveButton(R.string.discard, discardButtonClickListener);
         builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Keep editing" button, so dismiss the dialog
-                // and continue editing the product.
                 if (dialog != null) {
                     dialog.dismiss();
                 }
             }
         });
 
-        // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
