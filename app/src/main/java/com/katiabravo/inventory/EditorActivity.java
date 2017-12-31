@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private EditText mProductEditText;
     private TextView mQuantityTextView;
+    private Button mAddQuantityButton;
+    private Button mSubtractQuantityButton;
     private EditText mPriceEditText;
 
     private boolean mProductHasChanged = false;
@@ -40,7 +43,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             return false;
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +63,54 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mProductEditText = (EditText) findViewById(R.id.edit_product_name);
         mQuantityTextView = (TextView) findViewById(R.id.edit_product_quantity);
         mPriceEditText = (EditText) findViewById(R.id.edit_product_price);
+        mAddQuantityButton = (Button) findViewById(R.id.add_quantity);
+        mSubtractQuantityButton = (Button) findViewById(R.id.subtract_quantity);
 
         mPriceEditText.setOnTouchListener(mTouchListener);
         mQuantityTextView.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
+        mAddQuantityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addOneToQuantity();
+                mProductHasChanged = true;
+            }
+        });
 
+        mSubtractQuantityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                subtractOneToQuantity();
+                mProductHasChanged = true;
+            }
+        });
     }
 
+    private void addOneToQuantity() {
+        String previousQuantityString = mQuantityTextView.getText().toString();
+        int previousQuantity;
+        if (previousQuantityString.isEmpty()) {
+            previousQuantity = 0;
+        } else {
+            previousQuantity = Integer.parseInt(previousQuantityString);
+        }
+        mQuantityTextView.setText(String.valueOf(previousQuantity + 1));
+    }
+
+    private void subtractOneToQuantity() {
+        String previousQuantityString = mQuantityTextView.getText().toString();
+        int previousQuantity;
+        if (previousQuantityString.isEmpty()) {
+            previousQuantity = 0;
+        } else {
+            previousQuantity = Integer.parseInt(previousQuantityString);
+        }
+        if (previousQuantity == 0){
+            mQuantityTextView.setText(String.valueOf(previousQuantity));
+        }else{
+            mQuantityTextView.setText(String.valueOf(previousQuantity - 1));
+        }
+    }
 
     private void saveProduct() {
         String productNameString = mProductEditText.getText().toString().trim();
@@ -79,11 +122,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, productNameString);
-        int quantity = 0;
-        if (!TextUtils.isEmpty(priceString)) {
-            quantity = Integer.parseInt(quantityString);
-        }
-        values.put(ProductEntry.COLUMN_PRICE, quantity);
+        values.put(ProductEntry.COLUMN_QUANTITY, quantityString);
         int price = 0;
         if (!TextUtils.isEmpty(priceString)) {
             price = Integer.parseInt(priceString);
@@ -122,8 +161,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         if (mCurrentProductUri == null) {
-            MenuItem menuItem = menu.findItem(R.id.action_delete);
-            menuItem.setVisible(false);
+            MenuItem deleteMenuItem = menu.findItem(R.id.action_delete);
+            deleteMenuItem.setVisible(false);
+            MenuItem orderMoreItem = menu.findItem(R.id.action_order_more);
+            orderMoreItem.setVisible(false);
         }
         return true;
     }

@@ -30,32 +30,26 @@
         <TextView
             android:id="@+id/unit_quantity"
             android:text="@string/unit_quantity"
-            android:fontFamily="sans-serif-light"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="3"/>
+            style="@style/EditorTitleStyle"/>
         
         <Button
-            android:layout_width="0dp"
+            android:id="@+id/add_quantity"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="+"/>
 
         <TextView
             android:id="@+id/edit_product_quantity"
-            android:text="0"
-            android:fontFamily="sans-serif-light"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"/>
+            android:text="@string/quantity_text"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            style="@style/EditorTitleStyle"/>
 
         <Button
-            android:layout_width="0dp"
+            android:id="@+id/subtract_quantity"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="+"/>
+            android:text="-"/>
     </LinearLayout>
 
     <LinearLayout
