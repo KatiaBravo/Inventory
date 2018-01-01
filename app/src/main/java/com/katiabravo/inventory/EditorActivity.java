@@ -160,7 +160,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 intent.setType("text/plain");
                 intent.setData(Uri.parse("mailto:"));
                 intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Recurrent new order");
-                String bodyMessage = "Please send us more " + mProductEditText.getText().toString().trim() + " as soon as possible!";
+                String bodyMessage = "Please send us more " + mProductEditText.getText().toString().toLowerCase().trim() + "s as soon as possible!";
                 intent.putExtra(android.content.Intent.EXTRA_TEXT, bodyMessage);
                 startActivity(intent);
             }

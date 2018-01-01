@@ -18,10 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.katiabravo.inventory.data.ProductContract.ProductEntry;
+import com.katiabravo.inventory.data.ProductDbHelper;
 
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int PRODUCT_LOADER = 0;
+    ProductDbHelper mDbHelper;
     ProductCursorAdapter mCursorAdapter;
 
     @Override
@@ -56,6 +58,11 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             }
         });
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this );
+    }
+
+    public void clickOnSale(long id, int quantity) {
+        dbHelper.sellOneItem(id, quantity);
+        adapter.swapCursor(dbHelper.readStock());
     }
 
     @Override
