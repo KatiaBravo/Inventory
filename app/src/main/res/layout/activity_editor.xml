@@ -66,5 +66,4 @@
             android:inputType="number"
             style="@style/EditorFieldStyle" />
     </LinearLayout>
-
 </LinearLayout>

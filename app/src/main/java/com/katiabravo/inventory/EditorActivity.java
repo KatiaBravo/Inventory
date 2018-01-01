@@ -29,7 +29,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Uri mCurrentProductUri;
 
     private EditText mProductEditText;
-    private TextView mQuantityTextView;
+    private static TextView mQuantityTextView;
     private Button mAddQuantityButton;
     private Button mSubtractQuantityButton;
     private EditText mPriceEditText;
@@ -97,7 +97,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mQuantityTextView.setText(String.valueOf(previousQuantity + 1));
     }
 
-    private void subtractOneToQuantity() {
+    public static void subtractOneToQuantity() {
         String previousQuantityString = mQuantityTextView.getText().toString();
         int previousQuantity;
         if (previousQuantityString.isEmpty()) {
@@ -151,6 +151,24 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
+    private void showOrderConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.order_message);
+        builder.setPositiveButton(R.string.email, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent(android.content.Intent.ACTION_SENDTO);
+                intent.setType("text/plain");
+                intent.setData(Uri.parse("mailto:"));
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Recurrent new order");
+                String bodyMessage = "Please send us more " + mProductEditText.getText().toString().trim() + " as soon as possible!";
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, bodyMessage);
+                startActivity(intent);
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_editor, menu);
@@ -178,6 +196,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
+                return true;
+            case R.id.action_order_more:
+                showOrderConfirmationDialog();
                 return true;
             case android.R.id.home:
                 if (!mProductHasChanged){

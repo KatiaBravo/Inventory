@@ -18,9 +18,13 @@
     <string name="delete_dialog_msg">Delete this Product?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="email">Email</string>
     <string name="empty_view">No products are currently in the inventory.</string>
+    <string name="order_message">You can place an order of this item by email.</string>
+    <string name="order_more_info">Order more info</string>
     <string name="unit_product_name">Product Name: </string>
     <string name="unit_dollars">Price: $</string>
     <string name="unit_quantity">Quantity: </string>
+    <string name="unit_email">User email: </string>
     <string name="quantity_text">0</string>
 </resources>
