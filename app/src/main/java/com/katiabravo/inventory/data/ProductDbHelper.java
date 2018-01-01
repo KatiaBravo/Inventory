@@ -1,8 +1,12 @@
 package com.katiabravo.inventory.data;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.katiabravo.inventory.data.ProductContract.ProductEntry;
 
 public class ProductDbHelper extends SQLiteOpenHelper {
 
@@ -28,4 +32,39 @@ public class ProductDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
+
+    public Cursor readStock() {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_QUANTITY,
+                ProductEntry.COLUMN_PRICE
+        };
+        Cursor cursor = db.query(
+                ProductEntry.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        return cursor;
+    }
+
+    public void sellOneItem(long itemId, int quantity) {
+        SQLiteDatabase db = getWritableDatabase();
+        int newQuantity = 0;
+        if (quantity > 0) {
+            newQuantity = quantity -1;
+        }
+        ContentValues values = new ContentValues();
+        values.put(ProductContract.ProductEntry.COLUMN_QUANTITY, newQuantity);
+        String selection = ProductEntry._ID + "=?";
+        String[] selectionArgs = new String[] { String.valueOf(itemId) };
+        db.update(ProductEntry.TABLE_NAME,
+                values, selection, selectionArgs);
+    }
 }
+

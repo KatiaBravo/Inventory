@@ -30,6 +30,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
+        mDbHelper = new ProductDbHelper(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -61,8 +62,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     public void clickOnSale(long id, int quantity) {
-        dbHelper.sellOneItem(id, quantity);
-        adapter.swapCursor(dbHelper.readStock());
+        mDbHelper.sellOneItem(id, quantity);
+        mCursorAdapter.swapCursor(mDbHelper.readStock());
     }
 
     @Override
