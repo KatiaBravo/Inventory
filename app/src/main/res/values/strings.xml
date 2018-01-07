@@ -4,6 +4,7 @@
     <string name="action_save">Save</string>
     <string name="action_delete">Delete</string>
     <string name="action_order_more">Order more</string>
+    <string name="add_image">Add image</string>
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep Editing</string>

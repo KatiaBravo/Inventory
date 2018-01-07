@@ -66,4 +66,15 @@
             android:inputType="number"
             style="@style/EditorFieldStyle" />
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_image"
+        android:text="@string/add_image"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/product_image" />
 </LinearLayout>

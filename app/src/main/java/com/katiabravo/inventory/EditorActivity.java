@@ -8,8 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -19,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,8 @@ import com.katiabravo.inventory.data.ProductContract.ProductEntry;
 
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     private static final int EXISTING_PRODUCT_LOADER = 0;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
     private Uri mCurrentProductUri;
 
     private EditText mProductEditText;
@@ -33,6 +38,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Button mAddQuantityButton;
     private Button mSubtractQuantityButton;
     private EditText mPriceEditText;
+    private Button mAddImageButton;
+    private ImageView mImageView;
 
     private boolean mProductHasChanged = false;
 
@@ -65,10 +72,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mPriceEditText = (EditText) findViewById(R.id.edit_product_price);
         mAddQuantityButton = (Button) findViewById(R.id.add_quantity);
         mSubtractQuantityButton = (Button) findViewById(R.id.subtract_quantity);
+        mAddImageButton = (Button) findViewById(R.id.add_image);
+        mImageView = (ImageView) findViewById(R.id.product_image);
 
         mPriceEditText.setOnTouchListener(mTouchListener);
         mQuantityTextView.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
+
         mAddQuantityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,6 +92,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             public void onClick(View view) {
                 subtractOneToQuantity();
                 mProductHasChanged = true;
+            }
+        });
+
+        mAddImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent();;
             }
         });
     }
@@ -109,6 +126,22 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mQuantityTextView.setText(String.valueOf(previousQuantity));
         }else{
             mQuantityTextView.setText(String.valueOf(previousQuantity - 5));
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(imageBitmap);
         }
     }
 
