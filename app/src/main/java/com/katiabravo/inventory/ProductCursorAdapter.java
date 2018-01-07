@@ -30,7 +30,7 @@ public class ProductCursorAdapter extends CursorAdapter {
         TextView productNameTextView = (TextView) view.findViewById(R.id.name);
         final TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
-        Button sale = (Button) view.findViewById(R.id.sale);
+        Button saleButton = (Button) view.findViewById(R.id.sale);
 
         int productNameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_QUANTITY);
@@ -46,7 +46,7 @@ public class ProductCursorAdapter extends CursorAdapter {
 
         final long id = cursor.getLong(cursor.getColumnIndex(ProductEntry._ID));
 
-        sale.setOnClickListener(new View.OnClickListener() {
+        saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 activity.clickOnSale(id,

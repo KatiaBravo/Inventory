@@ -22,11 +22,11 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String SQL_CREATE_PRODUCTS_TABLE =  "CREATE TABLE "
-                + ProductContract.ProductEntry.TABLE_NAME + " ("
-                + ProductContract.ProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ProductContract.ProductEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
-                + ProductContract.ProductEntry.COLUMN_QUANTITY + " INTEGER NOT NULL, "
-                + ProductContract.ProductEntry.COLUMN_PRICE + " INTEGER NOT NULL " + ")";
+                + ProductEntry.TABLE_NAME + " ("
+                + ProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ProductEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
+                + ProductEntry.COLUMN_QUANTITY + " INTEGER NOT NULL, "
+                + ProductEntry.COLUMN_PRICE + " INTEGER NOT NULL" + ")";
         db.execSQL(SQL_CREATE_PRODUCTS_TABLE);
     }
 

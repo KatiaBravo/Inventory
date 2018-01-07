@@ -94,7 +94,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         } else {
             previousQuantity = Integer.parseInt(previousQuantityString);
         }
-        mQuantityTextView.setText(String.valueOf(previousQuantity + 1));
+        mQuantityTextView.setText(String.valueOf(previousQuantity + 5));
     }
 
     public static void subtractOneToQuantity() {
@@ -108,7 +108,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (previousQuantity == 0){
             mQuantityTextView.setText(String.valueOf(previousQuantity));
         }else{
-            mQuantityTextView.setText(String.valueOf(previousQuantity - 1));
+            mQuantityTextView.setText(String.valueOf(previousQuantity - 5));
         }
     }
 
@@ -117,7 +117,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String quantityString = mQuantityTextView.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
 
-        if (mCurrentProductUri == null && TextUtils.isEmpty(productNameString) && TextUtils.isEmpty(quantityString)
+        if (mCurrentProductUri == null && TextUtils.isEmpty(productNameString) && quantityString == "0"
                 && TextUtils.isEmpty(priceString)) {return;}
 
         ContentValues values = new ContentValues();
@@ -275,7 +275,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 ProductEntry._ID,
                 ProductEntry.COLUMN_PRODUCT_NAME,
                 ProductEntry.COLUMN_QUANTITY,
-                ProductEntry.COLUMN_PRICE};
+                ProductEntry.COLUMN_PRICE
+        };
 
         return new CursorLoader(this,
                 mCurrentProductUri,
@@ -303,6 +304,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mProductEditText.setText(name);
             mQuantityTextView.setText(Integer.toString(quantity));
             mPriceEditText.setText(Integer.toString(price));
+
         }
     }
 

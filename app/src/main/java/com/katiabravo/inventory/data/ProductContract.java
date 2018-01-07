@@ -27,7 +27,6 @@ public final class ProductContract {
         public final static String COLUMN_QUANTITY = "quantity";
         public final static String COLUMN_PRICE = "price";
 
-
         public static boolean isValidQuantity(int quantity) {
             if (quantity >= 0) {
                 return true;
