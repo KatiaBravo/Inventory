@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -27,6 +28,8 @@ import android.widget.Toast;
 
 import com.katiabravo.inventory.data.ProductContract.ProductEntry;
 
+import java.io.ByteArrayOutputStream;
+
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     private static final int EXISTING_PRODUCT_LOADER = 0;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -40,6 +43,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText mPriceEditText;
     private Button mAddImageButton;
     private ImageView mImageView;
+    Bitmap imageBitmap;
 
     private boolean mProductHasChanged = false;
 
@@ -140,7 +144,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageBitmap = (Bitmap) extras.get("data");
             mImageView.setImageBitmap(imageBitmap);
         }
     }
@@ -161,6 +165,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             price = Integer.parseInt(priceString);
         }
         values.put(ProductEntry.COLUMN_PRICE, price);
+        values.put(ProductEntry.COLUMN_BITMAP, getBitmapAsByteArray(imageBitmap));
 
         Uri newUri;
         if (mCurrentProductUri == null) {
@@ -182,6 +187,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, getString(R.string.editor_update_product_successful), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private byte[] getBitmapAsByteArray(Bitmap image){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
+    }
+
+    private Bitmap getByteArrayAsBitmap(byte[] image){
+        Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+        return bitmap;
     }
 
     private void showOrderConfirmationDialog() {
@@ -308,7 +325,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 ProductEntry._ID,
                 ProductEntry.COLUMN_PRODUCT_NAME,
                 ProductEntry.COLUMN_QUANTITY,
-                ProductEntry.COLUMN_PRICE
+                ProductEntry.COLUMN_PRICE,
+                ProductEntry.COLUMN_BITMAP
         };
 
         return new CursorLoader(this,
@@ -329,14 +347,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
             int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRICE);
+            int imageColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_BITMAP);
 
             String name = cursor.getString(nameColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
+            byte[] image = cursor.getBlob(imageColumnIndex);
 
             mProductEditText.setText(name);
             mQuantityTextView.setText(Integer.toString(quantity));
             mPriceEditText.setText(Integer.toString(price));
+            mImageView.setImageBitmap(getByteArrayAsBitmap(image));
 
         }
     }

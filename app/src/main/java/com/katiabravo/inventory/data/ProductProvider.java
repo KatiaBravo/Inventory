@@ -131,6 +131,12 @@ public class ProductProvider extends ContentProvider {
                 throw new IllegalArgumentException("Product requires valid price");
             }
         }
+        if (values.containsKey(ProductEntry.COLUMN_BITMAP)) {
+            byte[] image = values.getAsByteArray(ProductEntry.COLUMN_PRICE);
+            if (image == null) {
+                throw new IllegalArgumentException("Product requires valid price");
+            }
+        }
         if (values.size() == 0) {
             return 0;
         }
