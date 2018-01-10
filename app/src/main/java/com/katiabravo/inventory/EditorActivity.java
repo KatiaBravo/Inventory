@@ -103,6 +103,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();;
+                mProductHasChanged = true;
             }
         });
     }

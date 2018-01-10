@@ -127,14 +127,14 @@ public class ProductProvider extends ContentProvider {
         }
         if (values.containsKey(ProductEntry.COLUMN_PRICE)) {
             Integer price = values.getAsInteger(ProductEntry.COLUMN_PRICE);
-            if (price != null && price < 0) {
+            if (price <= 0) {
                 throw new IllegalArgumentException("Product requires valid price");
             }
         }
         if (values.containsKey(ProductEntry.COLUMN_BITMAP)) {
-            byte[] image = values.getAsByteArray(ProductEntry.COLUMN_PRICE);
+            byte[] image = values.getAsByteArray(ProductEntry.COLUMN_BITMAP);
             if (image == null) {
-                throw new IllegalArgumentException("Product requires valid price");
+                throw new IllegalArgumentException("Product requires valid image");
             }
         }
         if (values.size() == 0) {
