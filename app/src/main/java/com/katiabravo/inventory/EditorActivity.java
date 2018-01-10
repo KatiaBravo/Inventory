@@ -154,8 +154,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String quantityString = mQuantityTextView.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
 
-        if (mCurrentProductUri == null && TextUtils.isEmpty(productNameString) && quantityString == "0"
-                && TextUtils.isEmpty(priceString)) {return;}
+        if (mCurrentProductUri == null && TextUtils.isEmpty(productNameString) || quantityString == "0"
+                || TextUtils.isEmpty(priceString) || imageBitmap == null) {return;}
 
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, productNameString);
@@ -282,6 +282,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
     private void showDeleteConfirmationDialog() {
 
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
@@ -367,6 +368,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mProductEditText = (EditText) findViewById(R.id.edit_product_name);
         mQuantityTextView = (TextView) findViewById(R.id.edit_product_quantity);
         mPriceEditText = (EditText) findViewById(R.id.edit_product_price);
+        mImageView = (ImageView) findViewById(R.id.product_image);
     }
 
     private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {

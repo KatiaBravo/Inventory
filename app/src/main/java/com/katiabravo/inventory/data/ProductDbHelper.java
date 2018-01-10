@@ -26,8 +26,8 @@ public class ProductDbHelper extends SQLiteOpenHelper {
                 + ProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ProductEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
                 + ProductEntry.COLUMN_QUANTITY + " INTEGER NOT NULL, "
-                + ProductEntry.COLUMN_PRICE + " INTEGER NOT NULL"
-                + ProductEntry.COLUMN_BITMAP + " BLOB);";
+                + ProductEntry.COLUMN_PRICE + " INTEGER NOT NULL, "
+                + ProductEntry.COLUMN_BITMAP + " BLOB" + ");";
         db.execSQL(SQL_CREATE_PRODUCTS_TABLE);
     }
 
