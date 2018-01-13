@@ -79,7 +79,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mAddImageButton = (Button) findViewById(R.id.add_image);
         mImageView = (ImageView) findViewById(R.id.product_image);
 
-        mPriceEditText.setOnTouchListener(mTouchListener);
+        mProductEditText.setOnTouchListener(mTouchListener);
         mQuantityTextView.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
 
@@ -127,7 +127,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         } else {
             previousQuantity = Integer.parseInt(previousQuantityString);
         }
-        if (previousQuantity == 0){
+        if (previousQuantity - 5 < 0){
             mQuantityTextView.setText(String.valueOf(previousQuantity));
         }else{
             mQuantityTextView.setText(String.valueOf(previousQuantity - 5));
@@ -155,38 +155,60 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String quantityString = mQuantityTextView.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
 
-        if (mCurrentProductUri == null && TextUtils.isEmpty(productNameString) || quantityString == "0"
-                || TextUtils.isEmpty(priceString) || imageBitmap == null) {return;}
+        boolean wantToSave = true;
 
-        ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME, productNameString);
-        values.put(ProductEntry.COLUMN_QUANTITY, quantityString);
-        int price = 0;
-        if (!TextUtils.isEmpty(priceString)) {
-            price = Integer.parseInt(priceString);
+        if (productNameString.isEmpty()) {
+            Toast.makeText(this, "Product name is required.", Toast.LENGTH_SHORT).show();
+            wantToSave = false;
         }
-        values.put(ProductEntry.COLUMN_PRICE, price);
-        values.put(ProductEntry.COLUMN_BITMAP, getBitmapAsByteArray(imageBitmap));
 
-        Uri newUri;
-        if (mCurrentProductUri == null) {
-            newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+        if (quantityString.equals("0")) {
+            Toast.makeText(this, "Product quantity is required.", Toast.LENGTH_SHORT).show();
+            wantToSave = false;
+        }
 
-            if (newUri == null) {
-                Toast.makeText(this, getString(R.string.editor_insert_product_failed),
-                        Toast.LENGTH_SHORT).show();
+        if (priceString.isEmpty()) {
+            Toast.makeText(this, "Product price is required.", Toast.LENGTH_SHORT).show();
+            wantToSave = false;
+        }
+
+        if (imageBitmap == null) {
+            Toast.makeText(this, "Product image is required.", Toast.LENGTH_SHORT).show();
+            wantToSave = false;
+        }
+
+        if(wantToSave == true){
+            ContentValues values = new ContentValues();
+            values.put(ProductEntry.COLUMN_PRODUCT_NAME, productNameString);
+            values.put(ProductEntry.COLUMN_QUANTITY, quantityString);
+            int price = 0;
+            if (!TextUtils.isEmpty(priceString)) {
+                price = Integer.parseInt(priceString);
+            }
+            values.put(ProductEntry.COLUMN_PRICE, price);
+            values.put(ProductEntry.COLUMN_BITMAP, getBitmapAsByteArray(imageBitmap));
+
+            Uri newUri;
+            if (mCurrentProductUri == null) {
+                newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+
+                if (newUri == null) {
+                    Toast.makeText(this, getString(R.string.editor_insert_product_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.editor_insert_product_successful),
+                            Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(this, getString(R.string.editor_insert_product_successful),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            int rowsAffected = getContentResolver().update(mCurrentProductUri, values,null, null);
+                int rowsAffected = getContentResolver().update(mCurrentProductUri, values, null, null);
 
-            if(rowsAffected == 0){
-                Toast.makeText(this, getString(R.string.editor_update_product_failed), Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(this, getString(R.string.editor_update_product_successful), Toast.LENGTH_SHORT).show();
+                if (rowsAffected == 0) {
+                    Toast.makeText(this, getString(R.string.editor_update_product_failed), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.editor_update_product_successful), Toast.LENGTH_SHORT).show();
+                }
             }
+            finish();
         }
     }
 
@@ -243,7 +265,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         switch (item.getItemId()) {
             case R.id.action_save:
                 saveProduct();
-                finish();
                 return true;
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
